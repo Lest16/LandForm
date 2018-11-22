@@ -25,7 +25,7 @@ echo "Время открытия формы: $dateOpenForm <br>";
 echo "Время отправки данных с формы: $dateSendForm <br>";
 echo "Время заполнения формы :" . $diffDate->format("%H:%I:%S") . "<br>";
 
-/*if (mail($emailTo, "Вам пришло письмо с сайта $serverName",
+if (mail($emailTo, "Вам пришло письмо с сайта $serverName",
     "Ваше имя: $name
     \nТема: $subject
     \nВаше сообщение: $message
@@ -37,9 +37,9 @@ echo "Время заполнения формы :" . $diffDate->format("%H:%I:%
 }
 else {
     echo "Не удалось отправить письмо<br>";
-}*/
+}
 
-$dsn = "mysql:host=$db_host;dbname=$db_base;charset=$charset";
+$dsn = "mysql:host=$db_host;port=$db_port;dbname=$db_base;charset=$charset;";
 $opt = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -49,7 +49,7 @@ $opt = [
 $pdo = new PDO($dsn, $db_user, $db_password, $opt);
 
 $stmt = $pdo->prepare('INSERT INTO contacts (name, email, subject, message, date_open_form, date_send_form, diff_date) 
-                      VALUES ("?", "?", "?", "?" , "?" , "?" ,"?" )');
+                      VALUES (?, ?, ?, ? ,? ,? ,?)');
 $stmt->execute(array($name, $emailTo, $subject, $message, $dateOpenForm,
     $dateSendForm, $diffDate->format("%H:%I:%S")));
 
